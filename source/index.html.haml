@@ -10,14 +10,20 @@
       .right
         %ul
           %li About
-          %li Login
+          %li.fb-login-button{:scope => "user_photos"}
+          %li#fb-user{:style => "display:none;"}
+            %img#image{:height => "25px", :width => "25px"}/
+            %span#name
   %nav
     .top-menu
       %ul
-        %li Everything
-        %li Videos
-        %li Discussions
-        %li Gifts
+        %li 
+          %select#albums-list{"data-placeholder" => "Select one of your albums", :disabled => "", :style => "width:350px;"}
+            %option
+        / %li Everything
+        / %li Videos
+        / %li Discussions
+        / %li Gifts
 
 #container
   - 100.times do

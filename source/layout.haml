@@ -3,11 +3,30 @@
   %head
     %meta{:charset => "utf-8"}
     = stylesheet_link_tag 'main'
-    = javascript_include_tag( "https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js", "all" )
     = yield_content :head
   %body{:class => page_classes}
+    #loading{:style => "display:none; background-color: red;"}
+      Loading...
     %header#hd
       = yield_content :header
     .wrapper
       #bd
         = yield
+      %script#item-template{:type => "text/x-handlebars-template"}
+        .item
+          %a{:href => "{{ link }}", :target => "_blank"}
+            %img{:alt => "{{ name }}", :src => "{{ image_url }}", :width => "192px"}/
+          %h2 {{name}}
+          .comments
+            {{comments_count}} comments
+          .chat
+            .chatbox {{likes_count}} likes
+            {{#list comments}}
+            .chatbox
+              %img{:alt => "{{ username }}", :height => "30px", :src => "http://graph.facebook.com/{{user_id}}/picture", :width => "30px"}/
+              %b {{ username }}
+              %p {{ message }}
+            {{/list}}
+      
+    #fb-root
+    = javascript_include_tag( "https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js", "all" )
