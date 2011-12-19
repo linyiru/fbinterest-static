@@ -993,8 +993,8 @@ function updateStatus() {
 
 window.fbAsyncInit = function() {
   FB.init({
-    appId      : '#TODO: YOUR FACEBOOK APP ID HERE', // App ID
-    channelUrl : '//#TODO: YOUR FACEBOOK APP URL HERE/channel.html', // Channel File
+    appId      : '298437490195311', // App ID
+    channelUrl : '//deduce.github.com/fbinterest-static/channel.html', // Channel File
     status     : true, // check login status
     cookie     : true, // enable cookies to allow the server to access the session
     oauth      : true, // enable OAuth 2.0
