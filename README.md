@@ -1,7 +1,5 @@
 # FBInterest = Facebook + Pinterst
 
-Part of source code of [FBinterest.com](http://fbinterest.com/)
-
 FBinterest - your Facebook photos within Pinterst.com style. The source code contains only only static files, which means you can use it without a database. 
 
 # Requirement
