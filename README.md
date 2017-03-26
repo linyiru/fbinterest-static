@@ -1,4 +1,4 @@
-#FBInterest = Facebook + Pinterst
+# FBInterest = Facebook + Pinterst
 
 Part of source code of [FBinterest.com](http://fbinterest.com/)
 
