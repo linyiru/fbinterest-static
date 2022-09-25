@@ -1,4 +1,9 @@
 .DS_Store
-.sass-cache/
-tmp
-tmp/restart.txt
+.env
+.sass-cache
+*.bundle
+*.cache
+*.log
+build
+dist
+node_modules

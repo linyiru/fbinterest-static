@@ -1,93 +1,117 @@
-### 
-# Compass
-###
+# General config
+# http://localhost:4567/__middleman
 
-# Susy grids in Compass
-# First: gem install compass-susy-plugin
-# require 'susy'
+# Import custom libraries and helpers
+Dir['./*/*.rb'].each { |file| load file }
+include FaviconsHelper
 
-# Change Compass configuration
-compass_config do |config|
-  config.output_style = :compress
-  config.line_comments = false
+# Load Sass from node_modules
+config[:sass_assets_paths] << File.join(root, 'node_modules')
+
+set :css_dir,    'assets/stylesheets'
+set :fonts_dir,  'assets/fonts'
+set :images_dir, 'assets/images'
+set :js_dir,     'assets/javascripts'
+
+# Set favicons
+set :favicons, [
+  {
+    rel: 'apple-touch-icon',
+    size: '180x180',
+    icon: 'apple-touch-icon.png'
+  },
+  {
+    rel: 'icon',
+    type: 'image/png',
+    size: '32x32',
+    icon: 'favicon32x32.png'
+  },
+  {
+    rel: 'icon',
+    type: 'image/png',
+    size: '16x16',
+    icon: 'favicon16x16.png'
+  },
+  {
+    rel: 'shortcut icon',
+    size: '64x64,32x32,24x24,16x16',
+    icon: 'favicon.ico'
+  }
+]
+
+# Activate and configure extensions
+# https://middlemanapp.com/advanced/configuration/#configuring-extensions
+
+activate :autoprefixer do |config|
+  config.browsers = 'last 2 versions'
 end
 
-###
-# Haml
-###
+activate :external_pipeline,
+         name: :webpack,
+         command: build? ? 'yarn run build' : 'yarn run start',
+         source: 'dist',
+         latency: 1
 
-# CodeRay syntax highlighting in Haml
-# First: gem install haml-coderay
-# require 'haml-coderay'
+activate :dotenv
+activate :meta_tags
 
-# CoffeeScript filters in Haml
-# First: gem install coffee-filter
-# require 'coffee-filter'
+# Layouts
+# https://middlemanapp.com/basics/layouts
 
-# Automatic image dimensions on image_tag helper
-# activate :automatic_image_sizes
+page '/*.xml',  layout: false
+page '/*.json', layout: false
+page '/*.txt',  layout: false
 
-###
-# Page command
-###
-
-# Per-page layout changes:
-# 
-# With no layout
-# page "/path/to/file.html", :layout => false
-# 
 # With alternative layout
-# page "/path/to/file.html", :layout => :otherlayout
-# 
-# A path which all have the same layout
-# with_layout :admin do
-#   page "/admin/*"
-# end
+# page '/path/to/file.html', layout: 'other_layout'
 
-# Proxy (fake) files
-# page "/this-page-has-no-template.html", :proxy => "/template-file.html" do
-#   @which_fake_page = "Rendering a fake page with a variable"
-# end
+# Proxy pages
+# https://middlemanapp.com/advanced/dynamic-pages
 
-###
+# proxy(
+#   '/this-page-has-no-template.html',
+#   '/template-file.html',
+#   locals: {
+#     which_fake_page: 'Rendering a fake page with a local variable'
+#   }
+# )
+
 # Helpers
-###
-
 # Methods defined in the helpers block are available in templates
+# https://middlemanapp.com/basics/helper-methods
+
 # helpers do
 #   def some_helper
-#     "Helping"
+#     'Helping'
 #   end
 # end
 
-# Change the CSS directory
-# set :css_dir, "alternative_css_directory"
-
-# Change the JS directory
-# set :js_dir, "alternative_js_directory"
-
-# Change the images directory
-# set :images_dir, "alternative_image_directory"
-
 # Build-specific configuration
+# https://middlemanapp.com/advanced/configuration/#environment-specific-settings
+
+configure :development do
+  set      :debug_assets, true
+  activate :livereload
+  activate :pry
+end
+
 configure :build do
-  # For example, change the Compass output style for deployment
-  # activate :minify_css
-  
-  # Minify Javascript on build
-  # activate :minify_javascript
-  
-  # Enable cache buster
-  # activate :cache_buster
-  
-  # Use relative URLs
-  # activate :relative_assets
-  
-  # Compress PNGs after build
-  # First: gem install middleman-smusher
-  # require "middleman-smusher"
-  # activate :smusher
-  
-  # Or use a different image path
-  # set :http_path, "/Content/images/"
+  ignore   File.join(config[:js_dir], '*') # handled by webpack
+  set      :asset_host, @app.data.site.host
+  set      :relative_links, true
+  activate :asset_hash
+  activate :favicon_maker, icons: generate_favicons_hash
+  activate :gzip
+  activate :minify_css
+  activate :minify_html
+  activate :minify_javascript
+  activate :relative_assets
+  activate :robots, rules: [{ user_agent: '*', allow: %w[/] }],
+                    sitemap: File.join(@app.data.site.host, 'sitemap.xml')
+end
+
+activate :deploy do |deploy|
+  deploy.deploy_method = :git
+  deploy.branch        = 'gh-pages'
+  deploy.build_before  = true
 end
