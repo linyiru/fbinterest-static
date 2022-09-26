@@ -10,6 +10,19 @@
 //    ├── 3. layouts/
 //    └── 4. pages/
 
-@import "settings/colors";
-@import "settings/fonts";
-@import "base/site";
+@import 'reset.scss';
+@import 'base/site';
+@import 'chosen.css.scss';
+
+div#loading {
+  text-align: center;
+  color: white;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100px;
+  font-size: 16px;
+  height: 1.5em;
+  line-height: 1.5em;
+  z-index: 99999;
+}

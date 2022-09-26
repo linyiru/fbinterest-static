@@ -92,7 +92,6 @@ page '/*.txt',  layout: false
 configure :development do
   set      :debug_assets, true
   activate :livereload
-  activate :pry
 end
 
 configure :build do
@@ -108,10 +107,4 @@ configure :build do
   activate :relative_assets
   activate :robots, rules: [{ user_agent: '*', allow: %w[/] }],
                     sitemap: File.join(@app.data.site.host, 'sitemap.xml')
-end
-
-activate :deploy do |deploy|
-  deploy.deploy_method = :git
-  deploy.branch        = 'gh-pages'
-  deploy.build_before  = true
 end
